@@ -1,0 +1,509 @@
+/* Estilos gerais */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.titulo {
+    font-size: 24px;
+    font-weight: bold;
+    color: rgb(147, 147, 161);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Dashboard */
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card h3 {
+    font-size: 14px;
+    color: rgb(147, 147, 161);
+    margin-bottom: 5px;
+}
+
+.numero-destaque {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.info-adicional {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.texto-verde {
+    color: #22c55e;
+}
+
+.texto-vermelho {
+    color: #ef4444;
+}
+
+.barra-progresso {
+    height: 10px;
+    background-color: #e5e5e5;
+    border-radius: 5px;
+    margin: 10px 0;
+    overflow: hidden;
+}
+
+.progresso {
+    height: 100%;
+    background-color: #22c55e;
+    width: 0%;
+    transition: width 0.5s ease-in-out;
+}
+
+.info-progresso {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Controles (busca e filtros) */
+.controles {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.campo-busca {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+}
+
+.input-busca {
+    width: 100%;
+    padding: 10px 10px 10px 40px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.icone-busca {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+}
+
+.filtros {
+    display: flex;
+    gap: 10px;
+}
+
+.select-filtro {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: white;
+}
+
+.botao {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.botao-primario {
+    background-color: #2563eb;
+    color: white;
+}
+
+.botao-primario:hover {
+    background-color: #1d4ed8;
+}
+
+.botao-secundario {
+    background-color: #e5e5e5;
+    color: #333;
+}
+
+.botao-secundario:hover {
+    background-color: #d1d1d1;
+}
+
+/* Tabela */
+.tabela-container {
+    overflow-x: auto;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tabela {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabela th, .tabela td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.tabela th {
+    background-color: #f9fafb;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #666;
+}
+
+.tabela tr.pago {
+    background-color: #f0fdf4;
+}
+
+.tabela tr:hover {
+    background-color: #f9fafb;
+}
+
+.badge {
+    padding: 3px 8px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.badge-verde {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.badge-vermelho {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.acoes {
+    display: flex;
+    gap: 5px;
+}
+
+.botao-acao {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 5px;
+    border-radius: 50%;
+}
+
+.botao-acao-verde {
+    color: #16a34a;
+}
+
+.botao-acao-verde:hover {
+    background-color: #dcfce7;
+}
+
+.botao-acao-vermelho {
+    color: #dc2626;
+}
+
+.botao-acao-vermelho:hover {
+    background-color: #fee2e2;
+}
+
+.botao-acao-azul {
+    color: #2563eb;
+}
+
+.botao-acao-azul:hover {
+    background-color: #dbeafe;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-conteudo {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-conteudo h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.campo-formulario {
+    margin-bottom: 15px;
+}
+
+.campo-formulario label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.campo-formulario input[type="text"],
+.campo-formulario input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.campo-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.campo-checkbox input {
+    width: 18px;
+    height: 18px;
+}
+
+.campo-checkbox label {
+    margin-bottom: 0;
+}
+
+.botoes-modal {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* Mensagem de tabela vazia */
+.tabela-vazia {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+    
+    .controles {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .campo-busca {
+        max-width: 100%;
+    }
+    
+    .tabela th, .tabela td {
+        padding: 10px;
+    }
+    
+    .filtros {
+        width: 100%;
+    }
+    
+    .select-filtro, .botao {
+        width: 50%;
+    }
+}
+
+/* Adicionar no seu arquivo CSS existente */
+
+/* Variáveis para os temas */
+:root {
+    --cor-fundo: #f5f5f5;
+    --cor-texto: #333;
+    --cor-card: white;
+    --cor-borda: #ddd;
+    --cor-input-fundo: white;
+    --cor-tabela-cabecalho: #f9fafb;
+    --cor-hover: #f9fafb;
+    --cor-sombra: rgba(0, 0, 0, 0.1);
+}
+
+.tema-escuro {
+    --cor-fundo: #1a1a1a;
+    --cor-texto: #e5e5e5;
+    --cor-card: #2d2d2d;
+    --cor-borda: #444;
+    --cor-input-fundo: #333;
+    --cor-tabela-cabecalho: #252525;
+    --cor-hover: #333;
+    --cor-sombra: rgba(0, 0, 0, 0.3);
+}
+
+body {
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.botao-tema {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--cor-texto);
+    padding: 5px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+}
+
+.botao-tema:hover {
+    background-color: var(--cor-hover);
+}
+
+/* Atualizar os elementos existentes para usar as variáveis de cor */
+.card {
+    background-color: var(--cor-card);
+    box-shadow: 0 2px 4px var(--cor-sombra);
+}
+
+.input-busca, .select-filtro {
+    border: 1px solid var(--cor-borda);
+    background-color: var(--cor-input-fundo);
+    color: var(--cor-texto);
+}
+
+.tabela-container {
+    background-color: var(--cor-card);
+    box-shadow: 0 2px 4px var(--cor-sombra);
+}
+
+.tabela th {
+    background-color: var(--cor-tabela-cabecalho);
+}
+
+.tabela td, .tabela th {
+    border-bottom: 1px solid var(--cor-borda);
+    color: var(--cor-texto);
+}
+
+.tabela tr:hover {
+    background-color: var(--cor-hover);
+}
+
+.modal-conteudo {
+    background-color: var(--cor-card);
+    color: var(--cor-texto);
+}
+
+.campo-formulario input[type="text"],
+.campo-formulario input[type="number"] {
+    background-color: var(--cor-input-fundo);
+    color: var(--cor-texto);
+    border: 1px solid var(--cor-borda);
+}
+
+/* Ajustar a cor do placeholder para inputs no modo escuro */
+.tema-escuro .input-busca::placeholder,
+.tema-escuro .campo-formulario input::placeholder {
+    color: #999;
+}
+
+/* Ajustar o estilo da linha paga no modo escuro */
+.tema-escuro .tabela tr.pago {
+    background-color: rgba(22, 101, 52, 0.2);
+}
+
+/* Adicionando estilo para o botão de WhatsApp */
+.botao-whatsapp {
+    background: none;
+    border: none;
+    color: #25D366;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.botao-whatsapp:hover {
+    background-color: rgba(37, 211, 102, 0.1);
+}
+#novo-whatsapp, #editar-whatsapp{
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 16px;
+    width: 100%;
+    background-color: var(--cor-input-fundo);
+    color: var(--cor-texto);
+    border: 1px solid var(--cor-borda);
+}
+.botao-whatsapp .fab {
+    font-size: 16px;
+}
+
+/* Aplicar tema escuro para o botão de WhatsApp */
+.tema-escuro .botao-whatsapp {
+    color: #25D366;
+}
+
+.tema-escuro .botao-whatsapp:hover {
+    background-color: rgba(37, 211, 102, 0.2);
+}

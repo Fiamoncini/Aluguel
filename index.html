@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Controle de Aluguel</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header-container">
+            <h1 class="titulo">Sistema de Controle de Pagamento de Aluguel</h1>
+            <button id="botao-tema" class="botao-tema">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+        
+        <!-- Dashboard -->
+        <div class="dashboard">
+            <div class="card">
+                <h3>Total de Inquilinos</h3>
+                <p class="numero-destaque" id="total-inquilinos">0</p>
+                <div class="info-adicional">
+                    <span class="texto-verde"><span id="inquilinos-pagos">0</span> Pagos</span>
+                    <span class="texto-vermelho"><span id="inquilinos-pendentes">0</span> Pendentes</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Valor Total</h3>
+                <p class="numero-destaque" id="valor-total">R$ 0,00</p>
+                <div class="info-adicional">
+                    <span class="texto-verde">R$ <span id="valor-pago">0,00</span> Recebido</span>
+                    <span class="texto-vermelho">R$ <span id="valor-pendente">0,00</span> Pendente</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Progresso de Pagamento</h3>
+                <div class="barra-progresso">
+                    <div class="progresso" id="barra-progresso"></div>
+                </div>
+                <p class="info-progresso">
+                    <span id="porcentagem-pagos">0</span>% dos aluguéis pagos
+                </p>
+            </div>
+        </div>
+        
+        <!-- Barra de Pesquisa e Filtros -->
+        <div class="controles">
+            <div class="campo-busca">
+                <i class="fas fa-search icone-busca"></i>
+                <input 
+                    type="text" 
+                    id="busca" 
+                    placeholder="Buscar inquilino..." 
+                    class="input-busca"
+                >
+            </div>
+            
+            <div class="filtros">
+                <select id="filtro" class="select-filtro">
+                    <option value="todos">Todos</option>
+                    <option value="pagos">Pagos</option>
+                    <option value="pendentes">Pendentes</option>
+                </select>
+                
+                <button id="botao-adicionar" class="botao botao-primario">
+                    <i class="fas fa-plus"></i> Adicionar
+                </button>
+            </div>
+        </div>
+        
+        <!-- Tabela de Inquilinos -->
+        <div class="tabela-container">
+            <table class="tabela">
+                <thead>
+                    <tr>
+                        <th>Loja</th>
+                        <th>Nome Responsável</th>
+                        <th>Valor</th>
+                        <th>Vencimento</th>
+                        <th>Status</th>
+                        <th>WhatsApp</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-inquilinos">
+                    <!-- Os dados serão inseridos aqui pelo JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Modal Adicionar Inquilino -->
+    <div id="modal-adicionar" class="modal">
+        <div class="modal-conteudo">
+            <h2>Adicionar Novo Inquilino</h2>
+            
+            <form id="form-adicionar">
+                <div class="campo-formulario">
+                    <label for="novo-nome">Nome</label>
+                    <input type="text" id="novo-nome" required>
+                </div>
+                
+                <div class="campo-formulario">
+                    <label for="nova-unidade">Loja</label>
+                    <input type="text" id="nova-unidade" required>
+                </div>
+                
+                <div class="campo-formulario">
+                    <label for="novo-whatsapp">WhatsApp</label>
+                    <input type="tel" id="novo-whatsapp" placeholder="Ex: 11999998888" required>
+                </div>
+                
+                <div class="campo-formulario">
+                    <label for="novo-valor">Valor do Aluguel</label>
+                    <input type="number" id="novo-valor" step="0.01" min="0" required>
+                </div>
+                
+                <div class="campo-formulario">
+                    <label for="nova-data">Dia de Vencimento</label>
+                    <input type="text" id="nova-data" placeholder="Dia" required>
+                </div>
+                
+                <div class="campo-formulario campo-checkbox">
+                    <input type="checkbox" id="novo-pago">
+                    <label for="novo-pago">Aluguel já pago este mês</label>
+                </div>
+                
+                <div class="botoes-modal">
+                    <button type="button" id="cancelar-adicionar" class="botao botao-secundario">Cancelar</button>
+                    <button type="submit" class="botao botao-primario">Adicionar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal Editar Inquilino -->
+    <div id="modal-editar" class="modal">
+        <div class="modal-conteudo">
+            <h2>Editar Inquilino</h2>
+            
+            <form id="form-editar">
+                <input type="hidden" id="editar-id">
+                
+                <div class="campo-formulario">
+                    <label for="editar-nome">Nome</label>
+                    <input type="text" id="editar-nome" required>
+                </div>
+                
+                <div class="campo-formulario">
+                    <label for="editar-unidade">Unidade</label>
+                    <input type="text" id="editar-unidade">
+                </div>
+                
+                <div class="campo-formulario">
+                    <label for="editar-whatsapp">WhatsApp</label>
+                    <input type="tel" id="editar-whatsapp" placeholder="Ex: 11999998888">
+                </div>
+                
+                <div class="campo-formulario">
+                    <label for="editar-valor">Valor do Aluguel</label>
+                    <input type="number" id="editar-valor" step="0.01" min="0" required>
+                </div>
+                
+                <div class="campo-formulario">
+                    <label for="editar-data">Dia de Vencimento</label>
+                    <input type="text" id="editar-data" required>
+                </div>
+                
+                <div class="campo-formulario campo-checkbox">
+                    <input type="checkbox" id="editar-pago">
+                    <label for="editar-pago">Aluguel já pago</label>
+                </div>
+                
+                <div class="botoes-modal">
+                    <button type="button" id="cancelar-editar" class="botao botao-secundario">Cancelar</button>
+                    <button type="submit" class="botao botao-primario">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script src="dados.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
