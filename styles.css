@@ -213,7 +213,9 @@ body {
     background-color: #fee2e2;
     color: #991b1b;
 }
-
+#porcentagem-pagos, #porcentagempagos{
+    color: var(--cor-texto);
+}
 .acoes {
     display: flex;
     gap: 5px;
