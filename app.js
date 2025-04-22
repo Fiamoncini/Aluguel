@@ -220,7 +220,7 @@ function excluirInquilino(id) {
 function abrirModalAdicionar() {
     // Reseta o formulário
     formAdicionar.reset();
-    document.getElementById('novo-valor').value = '0';
+    document.getElementById('novo-valor').value = '';
     
     // Exibe o modal
     modalAdicionar.style.display = 'flex';
