@@ -41,6 +41,251 @@ function alternarTema() {
     localStorage.setItem('tema-escuro', temaEscuro);
 }
 
+function exportarDados(formato) {
+    const dataAtual = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
+    
+    if (formato === 'csv') {
+        // Exportar para CSV
+        let csvContent = "data:text/csv;charset=utf-8,";
+        
+        // Cabeçalho
+        csvContent += "ID,Loja,Nome,Valor,Vencimento,Status,WhatsApp,Notas\n";
+        
+        // Dados
+        inquilinos.forEach(inquilino => {
+            const linha = [
+                inquilino.id,
+                inquilino.unidade,
+                inquilino.nome,
+                inquilino.valor,
+                inquilino.dataVencimento,
+                inquilino.pago ? "Pago" : "Pendente",
+                inquilino.whatsapp || "",
+                inquilino.notas || ""
+            ].join(",");
+            
+            csvContent += linha + "\n";
+        });
+        
+        // Download do arquivo
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `inquilinos-${dataAtual}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+    } else if (formato === 'json') {
+        // Exportar para JSON
+        const jsonContent = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(inquilinos, null, 2));
+        const link = document.createElement("a");
+        link.setAttribute("href", jsonContent);
+        link.setAttribute("download", `inquilinos-${dataAtual}.json`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+}
+
+// Função para gerar relatório simplificado em PDF (requer a biblioteca jsPDF)
+// Adicione a referência da lib no seu HTML:
+// <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+function gerarRelatorioPDF() {
+    // Verifica se a biblioteca jsPDF está disponível
+    if (typeof jspdf === 'undefined') {
+        alert('A biblioteca jsPDF não está carregada. Por favor, adicione-a ao seu projeto.');
+        return;
+    }
+
+    const { jsPDF } = jspdf;
+    const doc = new jsPDF();
+    
+    // Título
+    doc.setFontSize(18);
+    doc.text('Relatório de Aluguéis', 105, 15, { align: 'center' });
+    
+    // Data do relatório
+    doc.setFontSize(12);
+    const dataAtual = new Date().toLocaleDateString('pt-BR');
+    doc.text(`Data: ${dataAtual}`, 195, 15, { align: 'right' });
+    
+    // Informações do Dashboard
+    doc.setFontSize(14);
+    doc.text('Resumo', 14, 30);
+    
+    doc.setFontSize(12);
+    const total = inquilinos.length;
+    const pagos = inquilinos.filter(i => i.pago).length;
+    const pendentes = total - pagos;
+    const valorTotal = inquilinos.reduce((soma, i) => soma + i.valor, 0);
+    const valorPago = inquilinos.filter(i => i.pago).reduce((soma, i) => soma + i.valor, 0);
+    const valorPendente = valorTotal - valorPago;
+    
+    doc.text(`Total de Inquilinos: ${total}`, 14, 40);
+    doc.text(`Inquilinos com Pagamento em Dia: ${pagos}`, 14, 47);
+    doc.text(`Inquilinos com Pagamento Pendente: ${pendentes}`, 14, 54);
+    doc.text(`Valor Total: R$ ${formatarValor(valorTotal)}`, 14, 61);
+    doc.text(`Valor Recebido: R$ ${formatarValor(valorPago)}`, 14, 68);
+    doc.text(`Valor Pendente: R$ ${formatarValor(valorPendente)}`, 14, 75);
+    
+    // Tabela de Inquilinos
+    doc.setFontSize(14);
+    doc.text('Lista de Inquilinos', 14, 90);
+    
+    // Cabeçalhos da tabela
+    doc.setFontSize(10);
+    doc.text('Loja', 14, 100);
+    doc.text('Nome', 50, 100);
+    doc.text('Valor', 100, 100);
+    doc.text('Vencimento', 130, 100);
+    doc.text('Status', 170, 100);
+    
+    // Linha separadora
+    doc.line(14, 103, 195, 103);
+    
+    // Dados da tabela
+    let y = 110;
+    inquilinos.forEach((inquilino) => {
+        // Verifica se precisamos de uma nova página
+        if (y > 270) {
+            doc.addPage();
+            y = 30; // Reset da posição Y para a nova página
+            
+            // Adiciona cabeçalhos na nova página
+            doc.setFontSize(10);
+            doc.text('Loja', 14, 20);
+            doc.text('Nome', 50, 20);
+            doc.text('Valor', 100, 20);
+            doc.text('Vencimento', 130, 20);
+            doc.text('Status', 170, 20);
+            doc.line(14, 23, 195, 23);
+            y = 30;
+        }
+        
+        doc.text(inquilino.unidade, 14, y);
+        doc.text(inquilino.nome, 50, y);
+        doc.text(`R$ ${formatarValor(inquilino.valor)}`, 100, y);
+        doc.text(inquilino.dataVencimento, 130, y);
+        doc.text(inquilino.pago ? 'Pago' : 'Pendente', 170, y);
+        
+        y += 8;
+    });
+    
+    // Salvar o documento
+    doc.save(`relatorio-alugueis-${dataAtual.replace(/\//g, '-')}.pdf`);
+}
+
+// Adicionar menu de exportação
+function exibirMenuExportacao() {
+    // Criar dropdown de opções
+    const menuExportar = document.createElement('div');
+    menuExportar.id = 'menu-exportar';
+    menuExportar.style.position = 'absolute';
+    menuExportar.style.backgroundColor = 'var(--cor-card)';
+    menuExportar.style.boxShadow = '0 2px 10px var(--cor-sombra)';
+    menuExportar.style.borderRadius = '8px';
+    menuExportar.style.padding = '10px';
+    menuExportar.style.zIndex = '1000';
+    
+    // Posicionar abaixo do botão exportar
+    const botaoExportar = document.getElementById('botao-exportar');
+    const rect = botaoExportar.getBoundingClientRect();
+    menuExportar.style.top = `${rect.bottom + window.scrollY + 5}px`;
+    menuExportar.style.left = `${rect.left + window.scrollX}px`;
+    
+    // Opções do menu
+    menuExportar.innerHTML = `
+        <div class="opcao-exportar" data-formato="csv">
+            <i class="fas fa-file-csv"></i> Exportar como CSV
+        </div>
+        <div class="opcao-exportar" data-formato="json">
+            <i class="fas fa-file-code"></i> Exportar como JSON
+        </div>
+        <div class="opcao-exportar" data-formato="pdf">
+            <i class="fas fa-file-pdf"></i> Gerar Relatório PDF
+        </div>
+    `;
+    
+    // Estilizar opções
+    const estiloOpcoes = `
+        .opcao-exportar {
+            padding: 8px 15px;
+            cursor: pointer;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--cor-texto);
+        }
+        
+        .opcao-exportar:hover {
+            background-color: var(--cor-hover);
+        }
+    `;
+    
+    const style = document.createElement('style');
+    style.textContent = estiloOpcoes;
+    document.head.appendChild(style);
+    
+    // Adicionar ao body
+    document.body.appendChild(menuExportar);
+    
+    // Event listeners para as opções
+    document.querySelectorAll('.opcao-exportar').forEach(opcao => {
+        opcao.addEventListener('click', (e) => {
+            const formato = e.currentTarget.getAttribute('data-formato');
+            if (formato === 'pdf') {
+                gerarRelatorioPDF();
+            } else {
+                exportarDados(formato);
+            }
+            fecharMenuExportacao();
+        });
+    });
+    
+    // Fechar ao clicar fora
+    document.addEventListener('click', fecharMenuExportacaoClick);
+}
+
+function fecharMenuExportacaoClick(e) {
+    const menu = document.getElementById('menu-exportar');
+    const botaoExportar = document.getElementById('botao-exportar');
+    
+    if (menu && !menu.contains(e.target) && e.target !== botaoExportar) {
+        fecharMenuExportacao();
+    }
+}
+
+function fecharMenuExportacao() {
+    const menu = document.getElementById('menu-exportar');
+    if (menu) {
+        document.body.removeChild(menu);
+        document.removeEventListener('click', fecharMenuExportacaoClick);
+    }
+}
+
+// Adicionar event listener para o botão exportar
+document.addEventListener('DOMContentLoaded', () => {
+    const botaoExportar = document.getElementById('botao-exportar');
+    if (botaoExportar) {
+        botaoExportar.addEventListener('click', (e) => {
+            e.stopPropagation(); // Evitar que o clique se propague
+            
+            // Verificar se o menu já está aberto
+            const menuExistente = document.getElementById('menu-exportar');
+            if (menuExistente) {
+                fecharMenuExportacao();
+            } else {
+                exibirMenuExportacao();
+            }
+        });
+    }
+});
+
+
+
 // Event listener para o botão de tema
 botaoTema.addEventListener('click', alternarTema);
 

@@ -69,6 +69,10 @@
                 <button id="botao-adicionar" class="botao botao-primario">
                     <i class="fas fa-plus"></i> Adicionar
                 </button>
+
+                <button id="botao-exportar" class="botao botao-secundario">
+                <i class="fas fa-file-export"></i> Exportar
+                </button>
             </div>
         </div>
         
@@ -182,8 +186,22 @@
             </form>
         </div>
     </div>
-    
+</div>
+<div id="modal-historico" class="modal">
+    <div class="modal-conteudo modal-maior">
+        <h2>Histórico de Pagamentos</h2>
+        <div id="conteudo-historico"></div>
+        <div class="botoes-modal">
+            <button type="button" id="botao-fechar-historico" class="botao botao-secundario">Fechar</button>
+        </div>
+    </div>
+</div>
     <script src="dados.js"></script>
     <script src="app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+  window.jsPDF = window.jspdf.jsPDF;
+  const doc = new jsPDF();
+</script>
 </body>
 </html>
